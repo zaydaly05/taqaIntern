@@ -26,7 +26,7 @@ namespace InGazAPI.Controllers
         {
             _context.Areas.Add(area);
             _context.SaveChanges();
-            return CreatedAtAction(nameof(GetAllAreas), new { id = area.Id }, area);
+            return CreatedAtAction(nameof(GetAllAreas), new { id = area.AreaId }, area);
         }
     }
 }
