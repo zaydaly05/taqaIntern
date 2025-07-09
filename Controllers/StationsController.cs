@@ -38,6 +38,7 @@ namespace InGazAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Station>> CreateStation(Station station)
         {
+            ModifiedBy = user.name;
             _context.Stations.Add(station);
             await _context.SaveChangesAsync();
 
