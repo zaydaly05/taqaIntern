@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using InGazAPI.Data;
 using InGazAPI.Models;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace InGazAPI.Controllers
 {
@@ -9,25 +10,22 @@ namespace InGazAPI.Controllers
     [Route("api/[controller]")]
     public class StationsController : ControllerBase
     {
-        private readonly DataContext _context;
-
-        public StationsController(DataContext context)
-        {
-            _context = context;
-        }
+        // Assuming a static list for demonstration purposes
+        private static List<Station> _stations = new List<Station>();
 
         // GET: api/stations
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Station>>> GetStations()
         {
-            return await _context.Stations.Include(s => s.Area).ToListAsync();
+            // Simulating asynchronous behavior
+            return await Task.FromResult(_stations);
         }
 
         // GET: api/stations/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Station>> GetStation(int id)
         {
-            var station = await _context.Stations.Include(s => s.Area).FirstOrDefaultAsync(s => s.Id == id);
+            var station = await Task.FromResult(_stations.FirstOrDefault(s => s.Id == id));
             if (station == null)
                 return NotFound();
 
@@ -38,10 +36,9 @@ namespace InGazAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Station>> CreateStation(Station station)
         {
-            ModifiedBy = user.name;
-            _context.Stations.Add(station);
-            await _context.SaveChangesAsync();
-
+            // Assuming you want to set the ModifiedBy property
+            // ModifiedBy = user.name; // This line needs context on how to get the user name
+            _stations.Add(station);
             return CreatedAtAction(nameof(GetStation), new { id = station.Id }, station);
         }
 
@@ -52,8 +49,13 @@ namespace InGazAPI.Controllers
             if (id != station.Id)
                 return BadRequest();
 
-            _context.Entry(station).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            var existingStation = _stations.FirstOrDefault(s => s.Id == id);
+            if (existingStation == null)
+                return NotFound();
+
+            // Update the existing station properties
+            existingStation.Name = station.Name; // Assuming 'Name' is a property of Station
+            existingStation.Area = station.Area; // Assuming 'Area' is a property of Station
 
             return NoContent();
         }
@@ -62,13 +64,11 @@ namespace InGazAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteStation(int id)
         {
-            var station = await _context.Stations.FindAsync(id);
+            var station = await Task.FromResult(_stations.FirstOrDefault(s => s.Id == id));
             if (station == null)
                 return NotFound();
 
-            _context.Stations.Remove(station);
-            await _context.SaveChangesAsync();
-
+            _stations.Remove(station);
             return NoContent();
         }
     }

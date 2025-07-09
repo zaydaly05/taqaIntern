@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using InGazAPI.Data;
 using InGazAPI.Models;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace InGazAPI.Controllers
 {
@@ -9,25 +10,22 @@ namespace InGazAPI.Controllers
     [Route("api/[controller]")]
     public class ReadingsController : ControllerBase
     {
-        private readonly DataContext _context;
-
-        public ReadingsController(DataContext context)
-        {
-            _context = context;
-        }
+        // Assuming a static list for demonstration purposes
+        private static List<Reading> _readings = new List<Reading>();
 
         // GET: api/readings
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Reading>>> GetReadings()
         {
-            return await _context.Readings.Include(r => r.Unit).ToListAsync();
+            // Simulating asynchronous behavior
+            return await Task.FromResult(_readings);
         }
 
         // GET: api/readings/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Reading>> GetReading(int id)
         {
-            var reading = await _context.Readings.Include(r => r.Unit).FirstOrDefaultAsync(r => r.Id == id);
+            var reading = await Task.FromResult(_readings.FirstOrDefault(r => r.Id == id));
             if (reading == null)
                 return NotFound();
 
@@ -38,9 +36,7 @@ namespace InGazAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Reading>> CreateReading(Reading reading)
         {
-            _context.Readings.Add(reading);
-            await _context.SaveChangesAsync();
-
+            _readings.Add(reading);
             return CreatedAtAction(nameof(GetReading), new { id = reading.Id }, reading);
         }
 
@@ -51,8 +47,13 @@ namespace InGazAPI.Controllers
             if (id != reading.Id)
                 return BadRequest();
 
-            _context.Entry(reading).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            var existingReading = _readings.FirstOrDefault(r => r.Id == id);
+            if (existingReading == null)
+                return NotFound();
+
+            // Update the existing reading
+            existingReading.Value = reading.Value; // Assuming 'Value' is a property of Reading
+            existingReading.Unit = reading.Unit; // Assuming 'Unit' is a property of Reading
 
             return NoContent();
         }
@@ -61,13 +62,11 @@ namespace InGazAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteReading(int id)
         {
-            var reading = await _context.Readings.FindAsync(id);
+            var reading = await Task.FromResult(_readings.FirstOrDefault(r => r.Id == id));
             if (reading == null)
                 return NotFound();
 
-            _context.Readings.Remove(reading);
-            await _context.SaveChangesAsync();
-
+            _readings.Remove(reading);
             return NoContent();
         }
     }

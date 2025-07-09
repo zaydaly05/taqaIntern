@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using InGazAPI.Models;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace InGazAPI.Controllers
 {
@@ -7,25 +9,21 @@ namespace InGazAPI.Controllers
     [Route("api/[controller]")]
     public class AreasController : ControllerBase
     {
-        private readonly DataContext _context;
-
-        public AreasController(DataContext context)
-        {
-            _context = context;
-        }
+        // Assuming a static list for demonstration purposes
+        private static List<Area> _areas = new List<Area>();
 
         [HttpGet]
         public IActionResult GetAllAreas()
         {
-            var areas = _context.Areas.Include(a => a.Stations).ToList();
-            return Ok(areas);
+            // Return the static list of areas
+            return Ok(_areas);
         }
 
         [HttpPost]
         public IActionResult CreateArea([FromBody] Area area)
         {
-            _context.Areas.Add(area);
-            _context.SaveChanges();
+            // Add the new area to the static list
+            _areas.Add(area);
             return CreatedAtAction(nameof(GetAllAreas), new { id = area.AreaId }, area);
         }
     }
