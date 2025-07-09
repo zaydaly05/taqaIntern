@@ -8,7 +8,6 @@ namespace InGazAPI.Models
         public int AreaId { get; set; }
         public string AreaName { get; set; }
 
-        // Navigation properties
         public List<Station> Stations { get; set; } = new();
         public List<User> Users { get; set; } = new();
         public DateTime ModifiedOn{get; set;}

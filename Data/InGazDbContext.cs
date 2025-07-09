@@ -12,5 +12,6 @@ namespace InGazAPI.Data
         public DbSet<Unit> Units { get; set; }
         public DbSet<Reading> Readings { get; set; }
         public DbSet<WorkingLine> WorkingLines { get; set; }
+        public DbSet<User> Users { get; set; }
     }
 }
