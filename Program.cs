@@ -14,3 +14,6 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("OperatorAccess", policy =>
         policy.RequireRole("Operator"));
 });
+
+services.AddScoped<IUserRepository, UserRespiratory>();
+services.AddScoped<IStationServices, StationService>();
