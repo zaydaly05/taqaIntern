@@ -1,12 +1,20 @@
-public class Area
+
+using System.Collections.Generic;
+
+namespace InGazAPI.Models
 {
-public int AreaId{get; set;}
-public string Name {get; set;}
-public List<Station> Stations {get; set;}
+    public class Area
+    {
+        public int AreaId { get; set; }
+        public string AreaName { get; set; }
+
+        // Navigation properties
+        public List<Station> Stations { get; set; } = new();
+        public List<User> Users { get; set; } = new();
+        public DateTime ModifiedOn{get; set;}
+        public string ModifiedBy{get; set;}
+    }
 }
 
-//---------------code-----------------------------
 
 
-public DateTime ModifiedOn{get; set;}
-public string ModifiedBy{get; set;}
