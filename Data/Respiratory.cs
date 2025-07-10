@@ -9,13 +9,13 @@ namespace InGazAPI.Repositories
 {
     public class StationRepository
     {
-        private readonly YourDbContext _context;
+        private readonly InGazDbContext _context;
         private readonly DbSet<Station> _dbSet;
 
         public StationRepository(InGazDbContext context)
         {
             _context = context;
-            _dbSet = context.Stations; // or _context.Set<Station>();
+            _dbSet = context.Station; // or _context.Set<Station>();
         }
 
         // Stations Methods
@@ -117,4 +117,63 @@ namespace InGazAPI.Repositories
                 .ToListAsync();
         }
     }
+
+    public class UserRepository
+    {
+        private readonly InGazDbContext _context;
+        private readonly DbSet<User> _dbSet;
+
+        public UserRepository(InGazDbContext context)
+        {
+            _context = context;
+            _dbSet = context.User; // or _context.Set<User>();
+        }
+
+        // Users Methods
+        public async Task<IEnumerable<User>> GetAllAsync()
+        {
+            return await _dbSet.ToListAsync();
+        }
+
+        public async Task<User?> GetByIdAsync(int id)
+        {
+            return await _dbSet.FindAsync(id);
+        }
+
+        public async Task AddAsync(User user)
+        {
+            await _dbSet.AddAsync(user);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(User user)
+        {
+            _dbSet.Update(user);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(User user)
+        {
+            _dbSet.Remove(user);
+            await _context.SaveChangesAsync();
+        }
+
+
+
+        // Custom Methods
+        public async Task<IEnumerable<Station>> GetByAreaIdAsync(int areaId)
+        {
+            return await _dbSet.Where(s => s.AreaId == areaId).ToListAsync();
+        }
+
+        public async Task<IEnumerable<Station>> GetByUserIdAsync(int userId)
+        {
+            return await _dbSet
+                .Where(s => s.AssignedUsers.Any(u => u.UserId == userId))
+                .ToListAsync();
+        }
+    }
+
 }
+
+
