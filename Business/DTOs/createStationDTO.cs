@@ -14,14 +14,6 @@ namespace INGAZAPI.DTOs
         [Required(ErrorMessage = "Area ID is required")]
         public int AreaId { get; set; }
 
-        [Required(ErrorMessage = "Latitude is required")]
-        [Range(-90, 90, ErrorMessage = "Latitude must be between -90 and 90")]
-        public double Latitude { get; set; }
-
-        [Required(ErrorMessage = "Longitude is required")]
-        [Range(-180, 180, ErrorMessage = "Longitude must be between -180 and 180")]
-        public double Longitude { get; set; }
-
         [StringLength(50, ErrorMessage = "Station code cannot exceed 50 characters")]
         public string? StationCode { get; set; }
 
@@ -34,12 +26,7 @@ namespace INGAZAPI.DTOs
         public DateTime InstallationDate { get; set; }
 
         public bool IsActive { get; set; } = true;
-
-        [Range(0, double.MaxValue, ErrorMessage = "Elevation must be a positive number")]
-        public double? Elevation { get; set; }
-
-        [StringLength(200, ErrorMessage = "Address cannot exceed 200 characters")]
-        public string? Address { get; set; }
+        public bool IsAdmin { get; set; } = true;
 
         [Phone(ErrorMessage = "Invalid phone number format")]
         [StringLength(20, ErrorMessage = "Phone number cannot exceed 20 characters")]
@@ -70,7 +57,7 @@ namespace INGAZAPI.DTOs
         [StringLength(1000, ErrorMessage = "Notes cannot exceed 1000 characters")]
         public string? Notes { get; set; }
 
-        // Power supply information
+        /* Power supply information
         public bool HasBackupPower { get; set; } = false;
 
         [StringLength(50, ErrorMessage = "Power source cannot exceed 50 characters")]
@@ -98,7 +85,7 @@ namespace INGAZAPI.DTOs
         public double? OperatingTempMax { get; set; }
 
         [Range(0, 100, ErrorMessage = "Humidity range must be between 0 and 100%")]
-        public double? HumidityRange { get; set; }
+        public double? HumidityRange { get; set; }*/
 
         // Data validation
         public bool IsValid()
@@ -106,8 +93,7 @@ namespace INGAZAPI.DTOs
             return !string.IsNullOrWhiteSpace(Name) &&
                    !string.IsNullOrWhiteSpace(StationType) &&
                    AreaId > 0 &&
-                   Latitude >= -90 && Latitude <= 90 &&
-                   Longitude >= -180 && Longitude <= 180 &&
+                
                    InstallationDate <= DateTime.Now;
         }
 
@@ -134,11 +120,11 @@ namespace INGAZAPI.DTOs
             if (CalibrationIntervalDays == null)
                 CalibrationIntervalDays = 90; // Default 90 days
 
-            if (string.IsNullOrWhiteSpace(PowerSource))
+           /* if (string.IsNullOrWhiteSpace(PowerSource))
                 PowerSource = "AC Power";
 
             if (string.IsNullOrWhiteSpace(CommunicationType))
-                CommunicationType = "Ethernet";
+                CommunicationType = "Ethernet";*/
         }
     }
 }

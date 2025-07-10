@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("InGazAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c4bb940379d39e0839484f06b3fe6c919aead20e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+936cf92ac8ec76aa9a994b52054c12a96aa7cf38")]
 [assembly: System.Reflection.AssemblyProductAttribute("InGazAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("InGazAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
